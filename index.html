@@ -1,0 +1,297 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sound to Binary Converter</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="logo">SB✦</div>
+  <div class="identity">
+    <small>MULTIMEDIA PROJECT</small>
+    <h1>SOUND TO<span> BINARY CONVERTER</span></h1>
+    <p>Alyssa Jean Toso • Section 36</p>
+  </div>
+  <span class="status">● SYSTEM ONLINE</span>
+</header>
+
+<main>
+  <section class="panel hero">
+    <div>
+      <small>SOUND IN. BINARY OUT.</small>
+      <h2>Turn sound into<br><span>digital attitude.</span></h2>
+      <p>
+        Welcome to my Sound-to-Binary Converter! This project helps me
+        understand how sound can be changed into digital data using
+        samples, quantization levels, and binary numbers.
+      </p>
+    </div>
+    <div class="hero-icon">♫<span>01 · 10 · 11</span></div>
+  </section>
+
+  <!-- TOP ROW: SETTINGS AND GRAPH -->
+  <div class="dashboard-top">
+
+    <section class="panel">
+      <div class="section-title">
+        <div>
+          <small>01 / CONTROL PANEL</small>
+          <h2>Sound Settings</h2>
+        </div>
+        <span class="tag">CUSTOM INPUT</span>
+      </div>
+
+      <div class="input-grid">
+        <label>Frequency (Hz)
+          <input id="frequency" type="number" min="1" max="20000" value="1000">
+          <small>Controls the pitch of the sound.</small>
+        </label>
+
+        <label>Amplitude (0–1)
+          <input id="amplitude" type="number" min="0" max="1" step="0.1" value="0.8">
+          <small>Controls wave height and volume.</small>
+        </label>
+
+        <label>Number of Samples
+          <input id="samples" type="number" min="2" max="64" value="8">
+          <small>Choose from 2 to 64 samples.</small>
+        </label>
+
+        <label>Bits per Sample
+          <input id="bits" type="number" min="1" max="8" value="3">
+          <small>Choose from 1 to 8 bits.</small>
+        </label>
+      </div>
+
+      <div class="button-row">
+        <button id="convertBtn">✦ Convert Sound</button>
+        <button id="playBtn" class="secondary">♫ Play Tone</button>
+      </div>
+
+      <p id="message" role="status" aria-live="polite">Ready to convert.</p>
+    </section>
+
+    <section class="panel">
+      <div class="section-title">
+        <div>
+          <small>02 / VISUALIZER</small>
+          <h2>Sound Wave Graph</h2>
+        </div>
+        <span class="tag">LIVE GRAPH</span>
+      </div>
+
+      <p class="description">
+        The pink line connects the quantized sample points.
+        Change the settings to update the graph automatically.
+      </p>
+
+      <div class="chart-container">
+        <canvas id="waveCanvas" aria-label="Sound wave graph"></canvas>
+      </div>
+
+      <div class="table-wrap">
+        <table id="waveDataTable">
+          <thead><tr><th>Data</th></tr></thead>
+          <tbody>
+            <tr><th>Sample</th></tr>
+            <tr><th>Level</th></tr>
+            <tr><th>Binary</th></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- RESULTS, SAMPLE TABLE, BINARY -->
+  <div class="dashboard-bottom">
+
+    <section class="panel">
+      <div class="section-title">
+        <div>
+          <small>03 / RESULTS</small>
+          <h2>Key Information</h2>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <article class="stat">
+          <small>PERIOD</small>
+          <strong id="periodResult">—</strong>
+          <p>Time for one cycle</p>
+        </article>
+
+        <article class="stat">
+          <small>WAVELENGTH</small>
+          <strong id="wavelengthResult">—</strong>
+          <p>Sound speed: 343 m/s</p>
+        </article>
+
+        <article class="stat">
+          <small>QUANTIZATION LEVELS</small>
+          <strong id="levelsResult">—</strong>
+          <p>Available levels</p>
+        </article>
+
+        <article class="stat">
+          <small>TOTAL BITS</small>
+          <strong id="totalBitsResult">—</strong>
+          <p>Samples × bits</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-title">
+        <div>
+          <small>04 / SAMPLE BREAKDOWN</small>
+          <h2>Sample Data Table</h2>
+        </div>
+        <span class="tag">DIGITAL VALUES</span>
+      </div>
+
+      <div class="table-wrap">
+        <table id="sampleTable">
+          <thead>
+            <tr>
+              <th>Sample</th>
+              <th>Time (ms)</th>
+              <th>Wave Height</th>
+              <th>Level</th>
+              <th>Binary</th>
+            </tr>
+          </thead>
+          <tbody id="sampleBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-title">
+        <div>
+          <small>05 / OUTPUT</small>
+          <h2>Binary Code</h2>
+        </div>
+        <span class="tag">BASE 2</span>
+      </div>
+
+      <p class="description">
+        Digital binary representation of the quantized sample values.
+      </p>
+
+      <div id="binaryOutput" class="binary-output">—</div>
+      <button id="copyBtn">▣ Copy Binary</button>
+    </section>
+
+  </div>
+
+  <!-- BOTTOM ROW -->
+  <div class="dashboard-footer">
+
+    <section class="panel">
+      <div class="section-title">
+        <div>
+          <small>06 / EXPERIMENTS</small>
+          <h2>Test A / B / C</h2>
+        </div>
+        <span class="tag">QUICK TESTS</span>
+      </div>
+
+      <p class="description">
+        Load a test to compare different sound settings.
+      </p>
+
+      <div class="button-row">
+        <button data-test="A">Load Test A</button>
+        <button class="secondary" data-test="B">Load Test B</button>
+        <button class="secondary" data-test="C">Load Test C</button>
+      </div>
+
+      <div class="table-wrap">
+        <table id="testTable">
+          <thead>
+            <tr>
+              <th>Test</th>
+              <th>Frequency</th>
+              <th>Amplitude</th>
+              <th>Samples</th>
+              <th>Bits</th>
+              <th>Total Bits</th>
+            </tr>
+          </thead>
+          <tbody id="testBody"></tbody>
+        </table>
+      </div>
+
+      <h3>Selected Test Binary</h3>
+      <div id="testBinary" class="binary-output compact">
+        Select Test A, B, or C.
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-title">
+        <div>
+          <small>07 / QUICK REFERENCE</small>
+          <h2>Conversion Guide</h2>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table id="guideTable">
+          <thead>
+            <tr><th>Concept</th><th>Formula / Meaning</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Period</td><td>T = 1 / frequency</td></tr>
+            <tr><td>Wavelength</td><td>λ = 343 / frequency</td></tr>
+            <tr><td>Levels</td><td>2<sup>bits</sup></td></tr>
+            <tr><td>Sample Level</td><td>Round(((height + 1) / 2) × (levels − 1))</td></tr>
+            <tr><td>Total Bits</td><td>Samples × bits</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel notes-grid">
+      <div>
+        <small>08 / EXPLAIN IT</small>
+        <h2>What I Learned</h2>
+
+        <p><b>Sampling:</b> For me, sampling means taking small points from a sound wave to measure it.</p>
+
+        <p><b>Quantization:</b> I learned that quantization changes sample values into numerical levels.</p>
+
+        <p><b>Binary:</b> Binary uses only 0 and 1 to represent digital information.</p>
+      </div>
+
+      <div>
+        <small>IMPORTANT NOTES</small>
+        <h2>What I Noticed</h2>
+
+        <ul>
+          <li>Amplitude affects the height of the sampled wave.</li>
+          <li>More samples produce more points on the graph.</li>
+          <li>More bits provide more quantization levels.</li>
+          <li>The binary output changes when the settings change.</li>
+          <li>Digital sound can be represented using binary data.</li>
+        </ul>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  CONVERT ✦ SOUND ✦ TO ✦ BINARY
+</footer>
+
+</body>
+</html>
